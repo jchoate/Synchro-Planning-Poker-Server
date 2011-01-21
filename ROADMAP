@@ -1,0 +1,8 @@
+allow users to configure the port on which the server listens
+allow a user to configure the members who will be participating
+support the well-known sizing schemes
+only allow one user to reveal the votes
+record the votes for each round
+assign labels to each voting round
+provide a summary of all of the voting rounds
+allow a user to enter a consensus value after the votes

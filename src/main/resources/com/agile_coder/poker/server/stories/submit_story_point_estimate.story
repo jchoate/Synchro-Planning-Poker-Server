@@ -1,4 +1,4 @@
 Submitting a story point estimate
-Given I have a user id and a session id for an ongoing session
+Given the system is running
 When I submit my estimate
-Then the server records my estimate and returns it to me
+Then the server records my estimate

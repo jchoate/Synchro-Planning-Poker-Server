@@ -1,0 +1,50 @@
+Project description
+-------------------
+Synchro Poker Server is a server for collecting and returning estimates for planning poker.  It exposes a REST-ful interface that allows users to:
+
+* submit an estimate
+* view those who have submitted estimates
+* reveal estimates
+* view everyone's estimates after the reveal
+* Reset all of the estimates
+
+The requirements are captured as JBehave stories and can be viewed in src/main/resources/com/agile_coder/poker/server/stories.
+
+To run JBehave, execute
+
+mvn integration-test.
+
+Requirements
+------------
+  * Java >= 1.6 (OpenJDK and Sun have been tested)
+  * Maven 2.0
+
+Getting started
+---------------
+
+To build the executable jar with built-in dependencies, run
+mvn assembly:assembly
+
+To start the server run 
+java -jar SynchroPokerServer-<Version>-jar-with-dependencies.jar <port>
+
+
+The API
+-------
+To submit an estimate, you make a PUT request to http://<myserver>:<port>/poker/<myName>/<MyEstimate>
+  Where myserver is the name of your server
+  port is the port on which the server is listening
+  myName is your name
+  MyEstimate is the value of your estimate (0,1,2,3,5,8,13,20,40,100,BIO,INFINITY,UNKNOWN)
+  The server will return a 204 if the estimate has been accepted. If an estimate has been submitted
+  with the given name already or if the estimates have already been revealed, it will be rejected and the server will return a 409.
+
+To check on who has submitted an esimate make a GET request to http://<myserver>:<port>/poker
+  If the estimates have been revealed this will return a JSON document with name : estimate pairs
+  if the estimates have not been revealed the document will contain the names and nulls for the estimates
+
+To trigger revealing the estimates send a PUT request to http://<myserver>:<port>/poker/reveal
+  The server will return a 204 if the call succeeds
+
+To reset the estimates and prepare to start another round of estimating submit a DELETE request to http://<myserver>:<port>/poker
+	The server will return a 204 if the call succeeds
