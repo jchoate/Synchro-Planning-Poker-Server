@@ -42,6 +42,8 @@ public class EstimateRequestHandler {
             session.addEstimate(name, estimateVal);
         } catch (SubmitException e) {
             return Response.serverError().status(HttpStatus.SC_CONFLICT).build();
+        } catch (IllegalArgumentException e) {
+            return Response.serverError().status(HttpStatus.SC_CONFLICT).build();
         }
         return Response.noContent().build();
     }
