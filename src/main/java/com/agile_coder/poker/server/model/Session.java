@@ -26,7 +26,7 @@ public class Session {
     private HashMap<String, Estimate> estimates = new HashMap<String, Estimate>();
     private boolean revealed;
 
-    private Session() {}
+    public Session() {}
 
     public static Session getInstance() {
         Session session = sessionSingleton;
