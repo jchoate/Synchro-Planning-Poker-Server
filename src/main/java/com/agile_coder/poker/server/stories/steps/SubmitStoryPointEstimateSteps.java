@@ -31,17 +31,19 @@ public class SubmitStoryPointEstimateSteps extends BaseSteps {
     private static final String USER_NAME = "Test";
 
     private int result;
+    private int sessionId;
 
     @Given("the system is running")
     public void setupSession() throws IOException {
         startServer();
+        sessionId = createSession();
     }
 
     @When("I submit my estimate")
     public void sendEstimate() throws IOException {
         try {
             // int sessionId = createSession();
-            result = submitEstimate(USER_NAME, "13");
+            result = submitEstimate(sessionId, USER_NAME, "13");
         } finally {
             stopServer();
         }

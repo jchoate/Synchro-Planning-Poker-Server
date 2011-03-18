@@ -28,17 +28,20 @@ import org.jbehave.core.annotations.When;
 
 public class ResetEstimatesSteps extends BaseSteps {
 
+    int sessionId;
+
     @Given("that estimates have been revealed")
     public void reveal() throws IOException {
         startServer();
-        int result = submitEstimate("Jon", "3");
+        sessionId = createSession();
+        int result = submitEstimate(sessionId, "Jon", "3");
         assertEquals(HttpStatus.SC_NO_CONTENT, result);
     }
 
     @When("I reset the estimates")
     public void reset() throws IOException {
         HttpClient client = new HttpClient();
-        DeleteMethod delete = new DeleteMethod(BASE_URL + "/status");
+        DeleteMethod delete = new DeleteMethod(BASE_URL + "/" + sessionId + "/status");
         client.executeMethod(delete);
         assertEquals(HttpStatus.SC_NO_CONTENT, delete.getStatusCode());
     }
@@ -47,7 +50,7 @@ public class ResetEstimatesSteps extends BaseSteps {
     public void ensureEmptyEstimates() throws IOException {
         String status;
         try {
-            status = getStatus();
+            status = getStatus(sessionId);
         } finally {
             stopServer();
         }

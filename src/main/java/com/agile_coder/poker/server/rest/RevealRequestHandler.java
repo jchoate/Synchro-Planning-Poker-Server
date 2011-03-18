@@ -16,15 +16,16 @@ package com.agile_coder.poker.server.rest;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
-import com.agile_coder.poker.server.model.Session;
+import com.agile_coder.poker.server.SessionManager;
 
-@Path("/reveal")
+@Path("/{session}/reveal")
 public class RevealRequestHandler {
 
     @PUT
-    public void reveal() {
-        Session.getInstance().reveal();
+    public void reveal(@PathParam("session") final int session) {
+        SessionManager.getSession(session).reveal();
     }
 
 }

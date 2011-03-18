@@ -26,20 +26,22 @@ import org.jbehave.core.annotations.When;
 public class ViewCompletedEstimatesSteps extends BaseSteps {
 
     private String response;
+    private int sessionId;
 
     @Given("all of the estimates are unlocked")
     public void unlock() throws IOException {
         startServer();
-        submitEstimate("Test1", "3");
-        submitEstimate("Test2", "5");
-        submitEstimate("Test3", "3");
-        reveal();
+        sessionId = createSession();
+        submitEstimate(sessionId, "Test1", "3");
+        submitEstimate(sessionId, "Test2", "5");
+        submitEstimate(sessionId, "Test3", "3");
+        reveal(sessionId);
     }
 
     @When("I request the estimate list")
     public void getEstimates() throws IOException {
         try {
-            response = getStatus();
+            response = getStatus(sessionId);
         } finally {
             stopServer();
         }

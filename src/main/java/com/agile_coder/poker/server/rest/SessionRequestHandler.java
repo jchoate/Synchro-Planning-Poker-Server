@@ -15,6 +15,7 @@ package com.agile_coder.poker.server.rest;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import com.agile_coder.poker.server.SessionManager;
 
@@ -22,8 +23,10 @@ import com.agile_coder.poker.server.SessionManager;
 public class SessionRequestHandler {
 
     @POST
+    @Produces("application/json")
     public String createSession() {
         int id = SessionManager.createSession();
         return "{session: " + id + "}";
     }
+
 }

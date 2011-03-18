@@ -25,17 +25,20 @@ import org.jbehave.core.annotations.When;
 
 public class RevealEstimatesSteps extends BaseSteps {
 
+    private int sessionId;
+
     @Given("all members have voted")
     public void setVotes() throws IOException {
         startServer();
-        submitEstimate("Test1", "3");
-        submitEstimate("Test2", "5");
-        submitEstimate("Test3", "3");
+        sessionId = createSession();
+        submitEstimate(sessionId, "Test1", "3");
+        submitEstimate(sessionId, "Test2", "5");
+        submitEstimate(sessionId, "Test3", "3");
     }
 
     @When("I request to reveal the estimates")
     public void revealEstimates() throws IOException {
-        reveal();
+        reveal(sessionId);
     }
 
     @Then("requests for the estimate list return all of the estimates")
@@ -43,7 +46,7 @@ public class RevealEstimatesSteps extends BaseSteps {
         final String expected = "{Test1: 'THREE', Test2: 'FIVE', Test3: 'THREE'}";
         String status;
         try {
-            status = getStatus();
+            status = getStatus(sessionId);
         } finally {
             stopServer();
         }

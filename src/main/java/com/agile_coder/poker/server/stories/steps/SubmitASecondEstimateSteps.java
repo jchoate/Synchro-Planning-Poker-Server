@@ -25,17 +25,19 @@ import org.jbehave.core.annotations.When;
 public class SubmitASecondEstimateSteps extends BaseSteps {
 
     private int result;
+    private int sessionId;
 
     @Given("I have submitted an estimate")
     public void submitEstimate() throws IOException {
         startServer();
-        submitEstimate("Test1", "3");
+        sessionId = createSession();
+        submitEstimate(sessionId, "Test1", "3");
     }
 
     @When("I submit another estimate")
     public void resubmit() throws IOException {
         try {
-            result = submitEstimate("Test1", "5");
+            result = submitEstimate(sessionId, "Test1", "5");
         } finally {
             stopServer();
         }

@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.agile_coder.poker.server.SessionManager;
 import com.agile_coder.poker.server.model.Estimate;
 import com.agile_coder.poker.server.model.Session;
 
@@ -38,29 +39,32 @@ public class EstimateRequestHandlerTest {
 
     @Test
     public void addEstimate() {
+        int sess = SessionManager.createSession();
         EstimateRequestHandler handler = new EstimateRequestHandler();
-        handler.addEstimate(NAME, ESTIMATE);
-        Session.getInstance().reveal();
-        Map<String, Estimate> estimates = Session.getInstance().getEstimates();
+        handler.addEstimate(sess, NAME, ESTIMATE);
+        SessionManager.getSession(sess).reveal();
+        Map<String, Estimate> estimates = SessionManager.getSession(sess).getEstimates();
         Estimate expected = Estimate.valueOf(ESTIMATE.toUpperCase());
         assertEquals(expected, estimates.get(NAME));
     }
 
     @Test
     public void duplicateEstimate() {
+        int sess = SessionManager.createSession();
         final String estimate2 = "5";
         EstimateRequestHandler handler = new EstimateRequestHandler();
-        handler.addEstimate(NAME, ESTIMATE);
-        Response resp = handler.addEstimate(NAME, estimate2);
+        handler.addEstimate(sess, NAME, ESTIMATE);
+        Response resp = handler.addEstimate(sess, NAME, estimate2);
         assertEquals(HttpStatus.SC_CONFLICT, resp.getStatus());
     }
 
     @Test
     public void afterReveal() {
-        Session session = Session.getInstance();
+        int sess = SessionManager.createSession();
+        Session session = SessionManager.getSession(sess);
         session.reveal();
         EstimateRequestHandler handler = new EstimateRequestHandler();
-        Response resp = handler.addEstimate(NAME, ESTIMATE);
+        Response resp = handler.addEstimate(sess, NAME, ESTIMATE);
         assertEquals(HttpStatus.SC_CONFLICT, resp.getStatus());
     }
 }

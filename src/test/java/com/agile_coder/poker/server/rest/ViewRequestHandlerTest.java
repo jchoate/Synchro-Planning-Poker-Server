@@ -19,6 +19,7 @@ import net.sf.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.agile_coder.poker.server.SessionManager;
 import com.agile_coder.poker.server.model.Session;
 
 public class ViewRequestHandlerTest {
@@ -33,42 +34,46 @@ public class ViewRequestHandlerTest {
 
     @Test
     public void emptyList() {
+        int sess = SessionManager.createSession();
         JSONObject expected = JSONObject.fromObject("{}");
         ViewRequestHandler handler = new ViewRequestHandler();
-        String result = handler.viewCurrentVoting();
+        String result = handler.viewCurrentVoting(sess);
         assertEquals(expected, JSONObject.fromObject(result));
     }
 
     @Test
     public void beforeReveal() {
+        int sess = SessionManager.createSession();
         final JSONObject expected = JSONObject.fromObject("{Test: null}");
         EstimateRequestHandler estimate = new EstimateRequestHandler();
-        estimate.addEstimate(NAME, ESTIMATE);
+        estimate.addEstimate(sess, NAME, ESTIMATE);
         ViewRequestHandler handler = new ViewRequestHandler();
-        String result = handler.viewCurrentVoting();
+        String result = handler.viewCurrentVoting(sess);
         assertEquals(expected, JSONObject.fromObject(result));
     }
 
     @Test
     public void afterReveal() {
+        int sess = SessionManager.createSession();
         final JSONObject expected = JSONObject.fromObject("{Test: 'THREE'}");
         EstimateRequestHandler estimate = new EstimateRequestHandler();
-        estimate.addEstimate(NAME, ESTIMATE);
+        estimate.addEstimate(sess, NAME, ESTIMATE);
         RevealRequestHandler reveal = new RevealRequestHandler();
-        reveal.reveal();
+        reveal.reveal(sess);
         ViewRequestHandler handler = new ViewRequestHandler();
-        String result = handler.viewCurrentVoting();
+        String result = handler.viewCurrentVoting(sess);
         assertEquals(expected, JSONObject.fromObject(result));
     }
 
     @Test
     public void reset() {
+        int sess = SessionManager.createSession();
         JSONObject expected = JSONObject.fromObject("{}");
         EstimateRequestHandler estimate = new EstimateRequestHandler();
-        estimate.addEstimate(NAME, ESTIMATE);
+        estimate.addEstimate(sess, NAME, ESTIMATE);
         ViewRequestHandler handler = new ViewRequestHandler();
-        handler.resetSession();
-        String result = handler.viewCurrentVoting();
+        handler.resetSession(sess);
+        String result = handler.viewCurrentVoting(sess);
         assertEquals(expected, JSONObject.fromObject(result));
     }
 

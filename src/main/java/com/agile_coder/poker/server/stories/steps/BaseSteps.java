@@ -85,16 +85,16 @@ public class BaseSteps {
         return obj.getInt("session");
     }
 
-    protected int submitEstimate(String name, String vote) throws IOException {
-        String VOTE_URL = BASE_URL + "/" + name + "/" + vote;
+    protected int submitEstimate(int session, String name, String vote) throws IOException {
+        String VOTE_URL = BASE_URL + "/" + session + "/" + name + "/" + vote;
         HttpClient client = new HttpClient();
         PutMethod put = new PutMethod(VOTE_URL);
         return executeMethod(client, put);
     }
 
-    protected String getStatus() throws IOException {
+    protected String getStatus(int session) throws IOException {
         HttpClient client = new HttpClient();
-        GetMethod get = new GetMethod(BASE_URL + "/status");
+        GetMethod get = new GetMethod(BASE_URL + "/" + session + "/status");
         int result;
         String response;
         try {
@@ -108,9 +108,9 @@ public class BaseSteps {
         return response;
     }
 
-    protected void reveal() throws IOException {
+    protected void reveal(int session) throws IOException {
         HttpClient client = new HttpClient();
-        String revealUrl = BASE_URL + "/reveal";
+        String revealUrl = BASE_URL + "/" + session + "/reveal";
         PutMethod put = new PutMethod(revealUrl);
         int result = executeMethod(client, put);
         assertEquals(HttpStatus.SC_NO_CONTENT, result);

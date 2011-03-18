@@ -17,26 +17,28 @@ package com.agile_coder.poker.server.rest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import net.sf.json.JSONObject;
 
+import com.agile_coder.poker.server.SessionManager;
 import com.agile_coder.poker.server.model.Session;
 
-@Path("/status")
+@Path("/{session}")
 public class ViewRequestHandler {
 
     @GET
     @Produces("application/json")
-    public String viewCurrentVoting() {
-        Session session = Session.getInstance();
-        return JSONObject.fromObject(session.getEstimates()).toString();
+    public String viewCurrentVoting(@PathParam("session") final int session) {
+        Session s = SessionManager.getSession(session);
+        return JSONObject.fromObject(s.getEstimates()).toString();
     }
 
     @DELETE
-    public void resetSession() {
-        Session session = Session.getInstance();
-        session.reset();
+    public void resetSession(@PathParam("session") final int session) {
+        Session s = SessionManager.getSession(session);
+        s.reset();
     }
 
 }

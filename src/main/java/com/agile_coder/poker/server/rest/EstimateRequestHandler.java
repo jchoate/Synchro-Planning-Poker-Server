@@ -20,18 +20,20 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
 
+import com.agile_coder.poker.server.SessionManager;
 import com.agile_coder.poker.server.SubmitException;
 import com.agile_coder.poker.server.model.Estimate;
 import com.agile_coder.poker.server.model.Session;
 
-@Path("/{name}/{estimate}")
+@Path("/{session}/{name}/{estimate}")
 public class EstimateRequestHandler {
 
     @PUT
     public Response addEstimate(
+            @PathParam("session") final int session,
             @PathParam("name") String name,
             @PathParam("estimate") String estimate) {
-        Session session = Session.getInstance();
+        Session sess = SessionManager.getSession(session);
         try {
             Estimate estimateVal;
             if (isInteger(estimate)) {
@@ -39,7 +41,7 @@ public class EstimateRequestHandler {
             } else {
                 estimateVal = Estimate.valueOf(estimate.toUpperCase());
             }
-            session.addEstimate(name, estimateVal);
+            sess.addEstimate(name, estimateVal);
         } catch (SubmitException e) {
             return Response.serverError().status(HttpStatus.SC_CONFLICT).build();
         } catch (IllegalArgumentException e) {

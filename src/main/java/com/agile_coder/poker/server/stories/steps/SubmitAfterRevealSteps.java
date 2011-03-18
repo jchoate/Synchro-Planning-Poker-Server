@@ -25,20 +25,22 @@ import org.jbehave.core.annotations.When;
 public class SubmitAfterRevealSteps extends BaseSteps {
 
     private int result;
+    private int sessionId;
 
     @Given("the estimates have been unlocked")
     public void unlock() throws IOException {
         startServer();
-        submitEstimate("Test1", "3");
-        submitEstimate("Test2", "5");
-        submitEstimate("Test3", "3");
-        reveal();
+        sessionId = createSession();
+        submitEstimate(sessionId, "Test1", "3");
+        submitEstimate(sessionId, "Test2", "5");
+        submitEstimate(sessionId, "Test3", "3");
+        reveal(sessionId);
     }
 
     @When("I submit my estimate")
     public void submit() throws IOException {
         try {
-            result = submitEstimate("Test4", "5");
+            result = submitEstimate(sessionId, "Test4", "5");
         } finally {
             stopServer();
         }
