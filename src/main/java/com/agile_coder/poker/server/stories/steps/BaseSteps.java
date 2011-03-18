@@ -17,10 +17,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.jbehave.core.annotations.BeforeScenario;
 
@@ -67,6 +70,21 @@ public class BaseSteps {
         while (server.isAlive()) {}
     }
 
+    protected int createSession() throws IOException {
+        String createUrl = BASE_URL;
+        HttpClient client = new HttpClient();
+        PostMethod post = new PostMethod(createUrl);
+        String response;
+        try {
+            executeMethod(client, post);
+            response = post.getResponseBodyAsString();
+        } finally {
+            post.releaseConnection();
+        }
+        JSONObject obj = JSONObject.fromObject(response);
+        return obj.getInt("session");
+    }
+
     protected int submitEstimate(String name, String vote) throws IOException {
         String VOTE_URL = BASE_URL + "/" + name + "/" + vote;
         HttpClient client = new HttpClient();
@@ -76,7 +94,7 @@ public class BaseSteps {
 
     protected String getStatus() throws IOException {
         HttpClient client = new HttpClient();
-        GetMethod get = new GetMethod(BASE_URL);
+        GetMethod get = new GetMethod(BASE_URL + "/status");
         int result;
         String response;
         try {

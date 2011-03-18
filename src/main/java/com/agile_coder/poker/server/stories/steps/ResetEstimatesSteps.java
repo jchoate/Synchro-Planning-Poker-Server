@@ -38,7 +38,7 @@ public class ResetEstimatesSteps extends BaseSteps {
     @When("I reset the estimates")
     public void reset() throws IOException {
         HttpClient client = new HttpClient();
-        DeleteMethod delete = new DeleteMethod(BASE_URL);
+        DeleteMethod delete = new DeleteMethod(BASE_URL + "/status");
         client.executeMethod(delete);
         assertEquals(HttpStatus.SC_NO_CONTENT, delete.getStatusCode());
     }

@@ -11,32 +11,19 @@
  *
  * Copyright @2011 the original author or authors.
  */
-
 package com.agile_coder.poker.server.rest;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
-import net.sf.json.JSONObject;
+import com.agile_coder.poker.server.SessionManager;
 
-import com.agile_coder.poker.server.model.Session;
+@Path("/")
+public class SessionRequestHandler {
 
-@Path("/status")
-public class ViewRequestHandler {
-
-    @GET
-    @Produces("application/json")
-    public String viewCurrentVoting() {
-        Session session = Session.getInstance();
-        return JSONObject.fromObject(session.getEstimates()).toString();
+    @POST
+    public String createSession() {
+        int id = SessionManager.createSession();
+        return "{session: " + id + "}";
     }
-
-    @DELETE
-    public void resetSession() {
-        Session session = Session.getInstance();
-        session.reset();
-    }
-
 }

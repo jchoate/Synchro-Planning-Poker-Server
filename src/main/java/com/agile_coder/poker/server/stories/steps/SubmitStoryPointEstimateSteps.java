@@ -40,6 +40,7 @@ public class SubmitStoryPointEstimateSteps extends BaseSteps {
     @When("I submit my estimate")
     public void sendEstimate() throws IOException {
         try {
+            // int sessionId = createSession();
             result = submitEstimate(USER_NAME, "13");
         } finally {
             stopServer();
